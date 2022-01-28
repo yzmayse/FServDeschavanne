@@ -17,4 +17,13 @@ class DeschavanneController extends AbstractController
             'controller_name' => 'DeschavanneController',
         ]);
     }
+    /**
+     * @Route("/deschavanne/pages/loginconfirm", name="loginconfirm")
+     */
+    public function loginconfirm(): Response
+    {
+        return $this->render('deschavanne/pages/loginconfirm.html.twig', [
+            'controller_name' => 'DeschavanneController',
+        ]);
+    }
 }
