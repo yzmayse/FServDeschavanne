@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class DeschavanneController extends AbstractController
 {
@@ -20,10 +22,18 @@ class DeschavanneController extends AbstractController
     /**
      * @Route("/deschavanne/pages/loginconfirm", name="loginconfirm")
      */
-    public function loginconfirm(): Response
-    {
+    public function loginconfirm(Request $request): Response
+    {   
+        $Login = $request -> request -> get("Login");
+        $password = $request -> request -> get("Password");
+        if (($Login=="root") && ($password=="toor")){
+            $reponse = "acces autorise";
+             } 
+             else{
+                 $reponse = "erreur";
+             }
         return $this->render('deschavanne/pages/loginconfirm.html.twig', [
-            'controller_name' => 'DeschavanneController',
+            'Message' => $reponse,
         ]);
     }
 }
