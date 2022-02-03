@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Utilisateurs;
 
 class DeschavanneController extends AbstractController
 {
@@ -22,7 +24,7 @@ class DeschavanneController extends AbstractController
     /**
      * @Route("/deschavanne/pages/loginconfirm", name="loginconfirm")
      */
-    public function loginconfirm(Request $request): Response
+    public function loginconfirm(Request $request,EntityManagerInterface $manager): Response
     {   
         $Login = $request -> request -> get("Login");
         $password = $request -> request -> get("Password");
