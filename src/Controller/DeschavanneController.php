@@ -73,4 +73,16 @@ class DeschavanneController extends AbstractController
 
         return $this->redirectToRoute ('formuser');
     }
+
+     /**
+     * @Route("/deschavanne/pages/afficheuser", name="afficheuser")
+     */
+    public function afficheuser(Request $request,EntityManagerInterface $manager): Response
+    {
+        $mesUtilisateurs=$manager->getRepository(Utilisateurs::class)->findAll();
+        return $this->render('/deschavanne/pages/afficheuser.html.twig',['lst_utilisateurs' => $mesUtilisateurs]);
+        
+    }
 }
+
+
