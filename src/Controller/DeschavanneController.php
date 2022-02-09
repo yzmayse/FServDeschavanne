@@ -28,14 +28,21 @@ class DeschavanneController extends AbstractController
     {   
         $Login = $request -> request -> get("Login");
         $password = $request -> request -> get("Password");
-        if (($Login=="root") && ($password=="toor")){
-            $reponse = "acces autorise";
+        $reponse = $manager -> getRepository(utilisateurs :: class) -> findOneBy([ 'Login' => $Login]);
+        if ($reponse == NULL){
+            $repons ="utilisateurs inconnu";
              } 
-             else{
-                 $reponse = "erreur";
+        else{
+             $code = $reponse -> getPassword();
+             if ($code == $password){
+                 $repons = "acces autorisé";
+             }else {
+                $repons = "MDP = PAS VALIDE";
+             }
+             
              }
         return $this->render('deschavanne/pages/loginconfirm.html.twig', [
-            'Message' => $reponse,
+            'Message' => $repons,
         ]);
     }
 }
