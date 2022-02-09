@@ -45,4 +45,32 @@ class DeschavanneController extends AbstractController
             'Message' => $repons,
         ]);
     }
+
+     /**
+     * @Route("/deschavanne/pages/formuser", name="formuser")
+     */
+    public function formuser(Request $request,EntityManagerInterface $manager): Response
+    {
+     
+
+        return $this->render('deschavanne/pages/formuser.html.twig', [
+            'controller_name' => 'DeschavanneController',
+        ]);
+    }
+
+     /**
+     * @Route("/deschavanne/pages/adduser", name="adduser")
+     */
+    public function adduser(Request $request,EntityManagerInterface $manager): Response
+    {
+        $Login = $request -> request -> get("Login");
+        $password = $request -> request -> get("Password");
+        $monUtilisateur = new Utilisateurs();
+        $monUtilisateur -> setLogin($Login);
+        $monUtilisateur -> setPassword($password);
+        $manager -> persist($monUtilisateur);
+        $manager -> flush ();
+
+        return $this->redirectToRoute ('formuser');
+    }
 }
