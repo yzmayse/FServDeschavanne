@@ -43,6 +43,7 @@ class DeschavanneController extends AbstractController
              }
         return $this->render('deschavanne/pages/loginconfirm.html.twig', [
             'Message' => $repons,
+            'login' => $Login,
         ]);
     }
 
@@ -65,6 +66,7 @@ class DeschavanneController extends AbstractController
     {
         $Login = $request -> request -> get("Login");
         $password = $request -> request -> get("Password");
+        $password = (password_hash($password, PASSWORD_DEFAULT));
         $monUtilisateur = new Utilisateurs();
         $monUtilisateur -> setLogin($Login);
         $monUtilisateur -> setPassword($password);
@@ -82,6 +84,17 @@ class DeschavanneController extends AbstractController
         $mesUtilisateurs=$manager->getRepository(Utilisateurs::class)->findAll();
         return $this->render('/deschavanne/pages/afficheuser.html.twig',['lst_utilisateurs' => $mesUtilisateurs]);
         
+    }
+
+    /**
+     * @Route("/serveur/session", name="serveur/session")
+     */
+    public function session(SessionInterface $session): Response
+    {
+        $vs = $session -> get('nomVar');
+        $val=44;
+        $session -> set('nomVar',$val);
+        return $this->render ('serveur/session.html.twig');
     }
 }
 
