@@ -34,7 +34,7 @@ class DeschavanneController extends AbstractController
              } 
         else{
              $code = $reponse -> getPassword();
-             if ($code == $password){
+             if (password_verify($password,$code)){
                  $repons = "acces autorisé";
              }else {
                 $repons = "MDP = PAS VALIDE";
