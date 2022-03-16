@@ -25,7 +25,7 @@ class DeschavanneController extends AbstractController
     /**
      * @Route("/deschavanne/pages/loginconfirm", name="loginconfirm")
      */
-    public function loginconfirm(Request $request,EntityManagerInterface $manager): Response
+    public function loginconfirm(Request $request,EntityManagerInterface $manager,SessionInterface $session): Response
     {   
         $Login = $request -> request -> get("Login");
         $password = $request -> request -> get("Password");
@@ -36,7 +36,8 @@ class DeschavanneController extends AbstractController
         else{
              $code = $reponse -> getPassword();
              if (password_verify($password,$code)){
-                 $repons = "acces autorisé";
+                 $session->set('nomVar', $reponse->getId());
+                 return $this->redirectToRoute ('deschavanne/pages/session');
              }else {
                 $repons = "MDP = PAS VALIDE";
              }
@@ -51,7 +52,7 @@ class DeschavanneController extends AbstractController
      /**
      * @Route("/deschavanne/pages/formuser", name="formuser")
      */
-    public function formuser(Request $request,EntityManagerInterface $manager): Response
+    public function formuser(): Response
     {
      
 
@@ -66,11 +67,11 @@ class DeschavanneController extends AbstractController
     public function adduser(Request $request,EntityManagerInterface $manager): Response
     {
         $Login = $request -> request -> get("Login");
-        $password = $request -> request -> get("Password");
-        $password = (password_hash($password, PASSWORD_DEFAULT));
+        $Password = $request -> request -> get("Password");
+        $Password = (password_hash($Password, PASSWORD_DEFAULT));
         $monUtilisateur = new Utilisateurs();
         $monUtilisateur -> setLogin($Login);
-        $monUtilisateur -> setPassword($password);
+        $monUtilisateur -> setPassword($Password);
         $manager -> persist($monUtilisateur);
         $manager -> flush ();
 
@@ -88,15 +89,31 @@ class DeschavanneController extends AbstractController
     }
 
     /**
-     * @Route("/serveur/session", name="serveur/session")
+     * @Route("/deschavanne/pages/session", name="deschavanne/pages/session")
      */
-    public function session(SessionInterface $session): Response
+    public function session(SessionInterface $session,EntityManagerInterface $manager): Response
     {
-        $vs = $session -> get('nomVar');
-        $val=44;
-        $session -> set('nomVar',$val);
-        return $this->render ('serveur/session.html.twig');
+        $vs = $session -> get('login');
+        $user=$manager->getRepository(utilisateurs::class)->findOneById($vs);
+        return $this->redirectToRoute ('deschavanne');
     }
+
+     /**
+     * @Route("/deschavanne/pages/deconnection", name="deschavanne/pages/deconnection")
+     */
+    public function deconnection(SessionInterface $session): Response
+    {
+        $session->clear();
+        return $this->render('/deschavanne', [
+            'controller_name' => 'DeschavanneController',
+        ]);
+        
+    }
+
+
+
 }
+
+
 
 
